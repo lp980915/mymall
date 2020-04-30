@@ -8,3 +8,14 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
+
+# **代表所有路径下
+**/mvnw
+**/mvnw.cmd
+
+**/.mvn
+**/target/
+# .代表根目录下
+.idea
+
+**/.gitignore
