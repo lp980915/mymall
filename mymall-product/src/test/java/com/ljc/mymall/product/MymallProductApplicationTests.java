@@ -15,6 +15,7 @@ class MymallProductApplicationTests {
     @Autowired
     BrandService brandService;
 
+    //测试mybatisPlus
     @Test
     void contextLoads() {
     /*    BrandEntity brandEntity=new BrandEntity();
