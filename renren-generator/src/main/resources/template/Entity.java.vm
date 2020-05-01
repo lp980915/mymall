@@ -18,6 +18,9 @@ import lombok.Data;
  * @date ${datetime}
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 @TableName("${tableName}")
 public class ${className}Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
