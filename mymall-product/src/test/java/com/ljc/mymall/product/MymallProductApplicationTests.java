@@ -15,7 +15,7 @@ class MymallProductApplicationTests {
     @Autowired
     BrandService brandService;
 
-    //测试mybatisPlus的crud操作
+    //测试mybatisPlus的crud操作..
     @Test
     void contextLoads() {
     /*    BrandEntity brandEntity=new BrandEntity();
