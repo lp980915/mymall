@@ -30,6 +30,8 @@
       <module name="mymall-order" options="-parameters" />
       <module name="mymall-product" options="-parameters" />
       <module name="mymall-ware" options="-parameters" />
+      <module name="renren-fast" options="-parameters" />
+      <module name="renren-generator" options="-parameters" />
     </option>
   </component>
 </project>
