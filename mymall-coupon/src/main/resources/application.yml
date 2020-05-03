@@ -1,25 +1,25 @@
-spring:
-  datasource:
-    username: root
-    password: lp980915
-    url: jdbc:mysql://60.205.222.92:33306/mymall_sms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  # 配置nacos服务中心地址
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
-  # 为服务添加name为了让注册中心发现
-  application:
-    name: mymall-coupon
-
-
-mybatis-plus:
-  mapper-locations: classpath:/mapper/**/*.xml
-  # 设置自增主键
-  global-config:
-    db-config:
-      id-type: auto
-
-server:
-  port: 7000
+#spring:
+#  datasource:
+#    username: root
+#    password: lp980915
+#    url: jdbc:mysql://60.205.222.92:33306/mymall_sms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  # 配置nacos服务中心地址
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
+#  # 为服务添加name为了让注册中心发现
+#  application:
+#    name: mymall-coupon
+#
+#
+#mybatis-plus:
+#  mapper-locations: classpath:/mapper/**/*.xml
+#  # 设置自增主键
+#  global-config:
+#    db-config:
+#      id-type: auto
+#
+#server:
+#  port: 7000
