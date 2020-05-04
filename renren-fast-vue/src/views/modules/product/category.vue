@@ -1,6 +1,6 @@
 <template>
     <div>
-      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+      <el-tree :data="menus" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
     </div>
 </template>
 
@@ -12,7 +12,11 @@
       },
       data(){
           return {
-
+            menus:[],
+            defaultProps: {
+              children: 'children',
+              label: 'name'
+            }
           }
       },
       methods: {
@@ -23,8 +27,9 @@
           this.$http({
             url: this.$http.adornUrl('/product/category/list/tree'),
             method: 'get',
-          }).then(res=>{
-            console.log(res);
+            //解构data
+          }).then(({data})=>{
+            this.menus=data.data
           })
         }
       }
