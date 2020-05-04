@@ -7,14 +7,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="renren-generator" />
         <module name="mymall-common" />
+        <module name="mymall-order" />
         <module name="mymall-coupon" />
         <module name="mymall-product" />
         <module name="mymall-member" />
         <module name="renren-fast" />
+        <module name="renren-generator" />
         <module name="mymall-ware" />
-        <module name="mymall-order" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
