@@ -46,7 +46,7 @@ http.adornUrl = (actionName) => {
 }
 
 /**
- * get请求参数处理
+ * get请求参数处理,添加时间戳参数，防止get请求被浏览器缓存
  * @param {*} params 参数对象
  * @param {*} openDefultParams 是否开启默认参数?
  */
