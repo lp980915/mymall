@@ -1,7 +1,13 @@
 <template>
   <div>
+    <el-switch
+      v-model="draggable"
+      active-text="开启拖拽"
+      inactive-text="关闭拖拽">
+    </el-switch>
+    <el-button @click="batchSave">批量保存</el-button>
     <el-tree :data="menus" :props="defaultProps" :expand-on-click-node="false" show-checkbox node-key="catId"
-    :default-expanded-keys="expendedKey" :draggable="true" :allow-drop="allowDrop">
+    :default-expanded-keys="expendedKey" :draggable="draggable" :allow-drop="allowDrop" @node-drop="handleDrop">
         <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
         <span>
@@ -62,6 +68,7 @@
     },
     data() {
       return {
+        updateNodes:[],
         maxLevel:0,
         menus: [],
         defaultProps: {
@@ -81,10 +88,59 @@
           catId:null,
           icon:'',
           productUnit:''
-        }
+        },
+        draggable:false
       }
     },
     methods: {
+      //draggingNode代表当前正在拖拽节点，dropNode代表拖拽目标节点，dropType代表拖拽状态
+      handleDrop(draggingNode, dropNode, dropType, ev) {
+        console.log('tree drop: ', dropNode.label, dropType);
+        console.log('updateNodes',this.updateNodes);
+        //1.当前节点最新的父节点ID
+        let pCid=0;
+        let brother=null;
+        //以before或after方式插入的节点的父节点ID就是目标节点的父ID
+        if(dropType==='before'||dropType==='after'){
+          pCid=dropNode.parent.data.catId===undefined?0:dropNode.parent.data.catId;
+          brother=dropNode.parent.childNodes;
+          //以inner方式插入的节点的父节点ID就是目标节点ID
+        }else {
+          pCid=dropNode.data.catId;
+          brother=dropNode.childNodes;
+        }
+        //2.当前拖拽节点的最新顺序
+      for(let i=0;i<brother.length;i++){
+        if(brother[i].data.catId===draggingNode.data.catId){
+          //如果遍历的是当前正在拖拽的节点
+          let catLevel=draggingNode.level;
+          if(brother[i].level!==draggingNode.level){
+            //当前节点的层级发生变化
+            catLevel=brother[i].level;
+            //修改他子节点的层级
+            this.updateChildNodeLevel(brother[i]);
+          }
+          this.updateNodes.push( {catId:brother[i].data.catId,sort:i,parentCid:pCid,catLevel:catLevel});
+        }else {
+          this.updateNodes.push( {catId:brother[i].data.catId,sort:i});
+        }
+      }
+        //3.当前拖拽节点的最新层级
+
+      },
+      updateChildNodeLevel(node){
+        if(node.childNodes.length>0){
+          for(let i=0;i<node.childNodes.length;i++){
+            let cNode=node.childNodes[i].data;
+            this.updateNodes.push({catId:cNode.catId,catLevel:node.childNodes[i].level});
+            this.updateChildNodeLevel(node.childNodes[i]);
+          }
+        }
+
+      },
+      batchSave(){
+
+      },
       allowDrop(draggingNode, dropNode, type) {
         //被拖动的当前节点以及所在的父节点总层数不能大于3
      console.log(draggingNode, dropNode, type)
