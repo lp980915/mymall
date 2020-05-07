@@ -5,7 +5,7 @@
       active-text="开启拖拽"
       inactive-text="关闭拖拽">
     </el-switch>
-    <el-button @click="batchSave">批量保存</el-button>
+    <el-button v-if="draggable" @click="batchSave">批量保存</el-button>
     <el-tree :data="menus" :props="defaultProps" :expand-on-click-node="false" show-checkbox node-key="catId"
     :default-expanded-keys="expendedKey" :draggable="draggable" :allow-drop="allowDrop" @node-drop="handleDrop">
         <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -68,6 +68,7 @@
     },
     data() {
       return {
+        pCid:[],
         updateNodes:[],
         maxLevel:0,
         menus: [],
@@ -109,6 +110,7 @@
           pCid=dropNode.data.catId;
           brother=dropNode.childNodes;
         }
+        this.pCid.push(pCid);
         //2.当前拖拽节点的最新顺序
       for(let i=0;i<brother.length;i++){
         if(brother[i].data.catId===draggingNode.data.catId){
@@ -139,16 +141,28 @@
 
       },
       batchSave(){
-
+        this.$http({
+          url: this.$http.adornUrl('/product/category/update/sort'),
+          method: 'post',
+          data: this.$http.adornData(this.updateNodes, false)
+        }).then(({data}) => {
+          this.$message.success("菜单顺序等修改成功!");
+          this.getMenus();
+          this.expendedKey=[this.pCid];
+          this.updateNodes=[];
+          this.maxLevel=0;
+          // this.pCid=0;
+        });
       },
       allowDrop(draggingNode, dropNode, type) {
         //被拖动的当前节点以及所在的父节点总层数不能大于3
      console.log(draggingNode, dropNode, type)
-        this.countNodeLevel(draggingNode.data);
+        this.countNodeLevel(draggingNode);
      //当前拖动的节点+父节点所在的深度不大于3即可
-        let deep=this.maxLevel-draggingNode.data.catLevel+1;
+        let deep=Math.abs(this.maxLevel-draggingNode.level)+1;
         console.log("深度",deep);
         if(type==="inner"){
+          // console.log(`this.maxLevel:${this.maxLevel};draggingNode.data.catLevel:${draggingNode.data.catLevel};dropNode.level:${dropNode.level}`)
           return (deep+dropNode.level)<=3;
         }else{
           return (deep+dropNode.parent.level)<=3;
@@ -156,13 +170,13 @@
       },
       countNodeLevel(draggingNode){
         //找出所有子节点，求出最大深度
-        if(draggingNode.children!==null&& draggingNode.children.length>0){
-          for(let i=0;i<draggingNode.children.length;i++){
-            if(draggingNode.children[i].catLevel>this.maxLevel){
-              this.maxLevel=draggingNode.children[i].catLevel;
+        if(draggingNode.childNodes!==null&& draggingNode.childNodes.length>0){
+          for(let i=0;i<draggingNode.childNodes.length;i++){
+            if(draggingNode.childNodes[i].level>this.maxLevel){
+              this.maxLevel=draggingNode.childNodes[i].level;
             }
             //进行递归,判断当前遍历的节点还有没有子节点
-            this.countNodeLevel(draggingNode.children[i]);
+            this.countNodeLevel(draggingNode.childNodes[i]);
           }
         }
       },
